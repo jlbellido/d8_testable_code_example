@@ -5,6 +5,8 @@
  * Contains d8_testable_code_example.module.
  */
 
+use Drupal\Component\Render\FormattableMarkup;
+
 /**
  * Implements hook_ENTITY_TYPE_presave().
  */
@@ -14,12 +16,16 @@ function d8_testable_code_example_node_presave(Drupal\Core\Entity\EntityInterfac
   // - Articles: "Awesome article by @author".
   switch ($entity->bundle()) {
     case 'page':
-      _d8_testable_code_page_title_generate($entity);
+      $generated_title = _d8_testable_code_page_title_generate($entity);
       break;
     case 'article':
-      _d8_testable_code_article_title_generate($entity);
+      $generated_title = _d8_testable_code_article_title_generate($entity);
       break;
+    default:
+      $generated_title = $entity->getTitle();
   }
+
+  $entity->setTitle($generated_title);
 }
 
 /**
@@ -27,7 +33,7 @@ function d8_testable_code_example_node_presave(Drupal\Core\Entity\EntityInterfac
  * @param \Drupal\node\NodeInterface $node
  */
 function _d8_testable_code_page_title_generate(\Drupal\node\NodeInterface $node) {
-  $node->setTitle(t('Page: @title', ['@title' => $node->getTitle()]));
+  return (string) new FormattableMarkup('Page: @title', ['@title' => $node->getTitle()]);
 }
 
 /**
@@ -35,5 +41,5 @@ function _d8_testable_code_page_title_generate(\Drupal\node\NodeInterface $node)
  * @param \Drupal\node\NodeInterface $node
  */
 function _d8_testable_code_article_title_generate(\Drupal\node\NodeInterface $node) {
-  $node->setTitle(t('Awesome article by @author', ['@author' => $node->getOwner()->getAccountName()]));
+  return (string) new FormattableMarkup('Awesome article by @author', ['@author' => $node->getOwner()->getAccountName()]);
 }
