@@ -1,5 +1,4 @@
 services:
   d8_testable_code_example.node_title_generator:
     class: Drupal\d8_testable_code_example\NodeTitleGenerator
-    arguments: []
-
+    arguments: ['@language_manager']

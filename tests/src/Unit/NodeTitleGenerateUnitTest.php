@@ -19,7 +19,8 @@ class NodeTitleGenerateUnitTest extends UnitTestCase {
   protected $node_title_generator;
 
   protected function setUp() {
-    $this->node_title_generator = new NodeTitleGenerator();
+    $language_manager = $this->prophesize('Drupal\Core\Language\LanguageManagerInterface');
+    $this->node_title_generator = new NodeTitleGenerator($language_manager->reveal());
   }
 
   public function testGeneratePageTitleTest() {
