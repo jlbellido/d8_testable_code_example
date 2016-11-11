@@ -10,36 +10,8 @@ use Drupal\Component\Render\FormattableMarkup;
 /**
  * Implements hook_ENTITY_TYPE_presave().
  */
-function d8_testable_code_example_node_presave(Drupal\Core\Entity\EntityInterface $entity) {
-  // Updates the title to a fix string:
-  // - Basic pages: "Page: @title"
-  // - Articles: "Awesome article by @author".
-  switch ($entity->bundle()) {
-    case 'page':
-      $generated_title = _d8_testable_code_page_title_generate($entity);
-      break;
-    case 'article':
-      $generated_title = _d8_testable_code_article_title_generate($entity);
-      break;
-    default:
-      $generated_title = $entity->getTitle();
-  }
-
-  $entity->setTitle($generated_title);
-}
-
-/**
- * Set the title "Page: @title" to the given Node.
- * @param \Drupal\node\NodeInterface $node
- */
-function _d8_testable_code_page_title_generate(\Drupal\node\NodeInterface $node) {
-  return (string) new FormattableMarkup('Page: @title', ['@title' => $node->getTitle()]);
-}
-
-/**
- * Set the title "Awesome article by @author" to the given Node.
- * @param \Drupal\node\NodeInterface $node
- */
-function _d8_testable_code_article_title_generate(\Drupal\node\NodeInterface $node) {
-  return (string) new FormattableMarkup('Awesome article by @author', ['@author' => $node->getOwner()->getAccountName()]);
+function d8_testable_code_example_node_presave(\Drupal\node\NodeInterface $node) {
+  $generated_title = \Drupal::service('d8_testable_code_example.node_title_generator')
+    ->generateTitle($node);
+  $node->setTitle($generated_title);
 }
