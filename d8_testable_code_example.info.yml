@@ -1,0 +1,5 @@
+name: d8_testable_code_example
+type: module
+description: Example module that shows how to writte testable code in D8.
+core: 8.x
+package: Examples
