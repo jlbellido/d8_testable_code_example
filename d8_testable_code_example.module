@@ -31,6 +31,7 @@ function d8_testable_code_example_node_presave(Drupal\Core\Entity\EntityInterfac
 /**
  * Set the title "Page: @title" to the given Node.
  * @param \Drupal\node\NodeInterface $node
+ * @return string
  */
 function _d8_testable_code_page_title_generate(\Drupal\node\NodeInterface $node) {
   return (string) new FormattableMarkup('Page: @title', ['@title' => $node->getTitle()]);
@@ -39,7 +40,9 @@ function _d8_testable_code_page_title_generate(\Drupal\node\NodeInterface $node)
 /**
  * Set the title "Awesome article by @author" to the given Node.
  * @param \Drupal\node\NodeInterface $node
+ * @return string
  */
 function _d8_testable_code_article_title_generate(\Drupal\node\NodeInterface $node) {
-  return (string) new FormattableMarkup('Awesome article by @author', ['@author' => $node->getOwner()->getAccountName()]);
+  $author_name = $node->getOwner()->getAccountName();
+  return (string) new FormattableMarkup('Awesome article by @author', ['@author' => $author_name]);
 }
